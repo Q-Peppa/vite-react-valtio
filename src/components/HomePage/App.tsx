@@ -1,41 +1,38 @@
-import {proxy, useSnapshot} from "valtio";
-import {keys} from "lodash-es";
-import {derive} from "valtio/utils";
-const initialState = {
-    value : 0,
-}
-const counterStore = proxy(initialState)
-const reset = ()=>{
-    const nowObj = structuredClone(initialState)
-    keys(nowObj).forEach((key)=>{
-        counterStore[key] = nowObj[key]
-    })
-}
-const driveState = derive({
-    double : (get)=>get(counterStore).value * 2,
-    isValid : (get)=>get(counterStore).value > 0
-})
-const App = () => {
-    const counterConsumer = useSnapshot(counterStore)
-    const handleAdd = (payload:number | undefined)=>{
-        counterStore.value+=payload ??1
-    }
-    const handleSub = (payload:number | undefined)=>{
-        counterStore.value-=payload ??1
+import React from "react"
+import {
+    useSnapshot
+} from "valtio"
+import counterState from "./state";
+
+
+const Counter = ()=>{
+    const snap = useSnapshot(counterState);
+    // 1 . don't modify snapshot
+    // snap.value+=1
+    const handleAdd = (num:number)=>{
+        counterState.value+=num
+        // 而不是更新 snap
     }
     return (
-        <div>
-           <p>{counterConsumer.value}</p>
-            <p>this is double {driveState.double}</p>
+        <React.Fragment>
             <p>
-                isValid : {driveState.isValid ? 'true' : 'false'}
+                {snap.value}
             </p>
             <hr/>
-            <button onClick={()=>handleAdd(10)}>+</button>
-            <button onClick={() => handleSub(1)}>-</button>
-            <button onClick={reset}>reset</button>
-        </div>
-    );
-};
-
-export default App;
+            <button onClick={()=>handleAdd(1)}>add</button>
+            <button onClick={()=>handleAdd(-1)}>minus</button>
+        </React.Fragment>
+    )
+}
+const App = () => {
+  return (
+      <React.Fragment>
+            <h1>
+                hello valtio
+            </h1>
+          <hr/>
+          <Counter/>
+      </React.Fragment>
+  )
+}
+export default App
