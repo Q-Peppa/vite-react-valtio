@@ -18,7 +18,7 @@ const reset = ()=>{
 const ResetComponent = () => {
     const snap = useSnapshot(proxyState)
     React.useEffect(()=>{
-        console.log('snap', snap)
+        // console.log('snap', snap)
     } , [snap.obj.val])
 
     return (

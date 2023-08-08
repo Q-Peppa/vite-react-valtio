@@ -8,6 +8,8 @@ import DerivedComponent from "./DerivedComponent";
 import SnapShotCom from "./SnapShotCom";
 import ResetComponent from "./ResetComponent";
 import ProxyComponent from "./ProxyComponent";
+import MyCounterProvider from "./CounterContext";
+import CounterByContext from "./CounterContext/CounterByContext.tsx";
 
 subscribe(counterState, () => {
     console.log('value change', counterState.value);
@@ -50,20 +52,23 @@ const Counter = () => {
 const App = () => {
     return (
         <React.Fragment>
-            <h1>
-                hello valtio
-            </h1>
-            <hr/>
-            <Counter/>
+            <MyCounterProvider>
+                <h1>
+                    hello valtio
+                </h1>
+                <hr/>
+                <Counter/>
 
-            {/*    派生  , 计算属性 , computed */}
-            <hr/>
-            <DerivedComponent desc={'计算属性'}/>
-            <hr/>
-            <SnapShotCom desc={'如何拿到最新数据'}/>
-            <hr/>
-            <ResetComponent desc={'如何重置状态'}/>
-    <ProxyComponent desc={'useProxy 的使用'}/>
+                {/*    派生  , 计算属性 , computed */}
+                <hr/>
+                <DerivedComponent desc={'计算属性'}/>
+                <hr/>
+                <SnapShotCom desc={'如何拿到最新数据'}/>
+                <hr/>
+                <ResetComponent desc={'如何重置状态'}/>
+                <ProxyComponent desc={'useProxy 的使用'}/>
+                <CounterByContext desc={"配合react context 使用"}/>
+            </MyCounterProvider>
         </React.Fragment>
     )
 }
