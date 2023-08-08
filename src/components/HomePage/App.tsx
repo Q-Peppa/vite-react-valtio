@@ -1,8 +1,9 @@
 import React from "react"
 import {
-    useSnapshot
+    useSnapshot,
 } from "valtio"
 import counterState from "./state";
+import DerivedComponent from "./DerivedComponent";
 
 
 const Counter = ()=>{
@@ -32,6 +33,10 @@ const App = () => {
             </h1>
           <hr/>
           <Counter/>
+
+      {/*    派生  , 计算属性 , computed */}
+          <hr/>
+          <DerivedComponent/>
       </React.Fragment>
   )
 }
