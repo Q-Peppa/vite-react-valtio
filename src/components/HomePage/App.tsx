@@ -6,17 +6,18 @@ import {
 import counterState from "./state";
 import DerivedComponent from "./DerivedComponent";
 import SnapShotCom from "./SnapShotCom";
+import ResetComponent from "./ResetComponent";
 
-subscribe(counterState, ()=>{
-    console.log('value change' , counterState.value);
+subscribe(counterState, () => {
+    console.log('value change', counterState.value);
     console.log(counterState.methodRef.current())
 })
-const Counter = ()=>{
+const Counter = () => {
     const snap = useSnapshot(counterState);
     // 1 . don't modify snapshot
     // snap.value+=1
-    const handleAdd = (num:number)=>{
-        counterState.value+=num
+    const handleAdd = (num: number) => {
+        counterState.value += num
         // 而不是更新 snap
     }
     // React.useEffect(()=>{
@@ -24,15 +25,15 @@ const Counter = ()=>{
     //     // return ()=>un()
     // }, [counterState.value])
 
-    const someMethod = ()=>{
+    const someMethod = () => {
         console.log('someMethod')
         return 'invoke'
     }
     // 如何监听变化 ,
     // 如何使用ref
-    React.useEffect(()=>{
+    React.useEffect(() => {
         counterState.methodRef.current = someMethod
-    } , [])
+    }, [])
 
     return (
         <React.Fragment>
@@ -40,26 +41,29 @@ const Counter = ()=>{
                 {snap.value}
             </p>
             <hr/>
-            <button onClick={()=>handleAdd(1)}>add</button>
-            <button onClick={()=>handleAdd(-1)}>minus</button>
+            <button onClick={() => handleAdd(1)}>add</button>
+            <button onClick={() => handleAdd(-1)}>minus</button>
         </React.Fragment>
     )
 }
 const App = () => {
-  return (
-      <React.Fragment>
+    return (
+        <React.Fragment>
             <h1>
                 hello valtio
             </h1>
-          <hr/>
-          <Counter/>
+            <hr/>
+            <Counter/>
 
-      {/*    派生  , 计算属性 , computed */}
-          <hr/>
-          <DerivedComponent/>
-          <hr/>
-          <SnapShotCom />
-      </React.Fragment>
-  )
+            {/*    派生  , 计算属性 , computed */}
+            <hr/>
+            <DerivedComponent desc={'计算属性'}/>
+            <hr/>
+            <SnapShotCom desc={'如何拿到最新数据'}/>
+            <hr/>
+            <ResetComponent desc={'如何重置状态'}/>
+
+        </React.Fragment>
+    )
 }
 export default App
