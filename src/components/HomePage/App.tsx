@@ -7,6 +7,7 @@ import counterState from "./state";
 import DerivedComponent from "./DerivedComponent";
 import SnapShotCom from "./SnapShotCom";
 import ResetComponent from "./ResetComponent";
+import ProxyComponent from "./ProxyComponent";
 
 subscribe(counterState, () => {
     console.log('value change', counterState.value);
@@ -62,7 +63,7 @@ const App = () => {
             <SnapShotCom desc={'如何拿到最新数据'}/>
             <hr/>
             <ResetComponent desc={'如何重置状态'}/>
-
+    <ProxyComponent desc={'useProxy 的使用'}/>
         </React.Fragment>
     )
 }
