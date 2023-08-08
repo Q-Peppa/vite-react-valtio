@@ -5,6 +5,7 @@ import {
 } from "valtio"
 import counterState from "./state";
 import DerivedComponent from "./DerivedComponent";
+import SnapShotCom from "./SnapShotCom";
 
 subscribe(counterState, ()=>{
     console.log('value change' , counterState.value);
@@ -57,6 +58,7 @@ const App = () => {
           <hr/>
           <DerivedComponent/>
           <hr/>
+          <SnapShotCom />
       </React.Fragment>
   )
 }
