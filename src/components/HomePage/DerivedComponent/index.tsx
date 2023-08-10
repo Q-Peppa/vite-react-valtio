@@ -28,8 +28,8 @@ const DerivedComponent = () => {
             <h1>奇数的个数, {oddSnap.length}</h1>
             {
                 map(snap.list , (item)=>{
-                    return (<React.Fragment>
-                        <p key={item}>{item}</p>
+                    return (<React.Fragment key={item}>
+                        <p>{item}</p>
                     </React.Fragment>)
                 })
             }

@@ -10,6 +10,7 @@ import ResetComponent from "./ResetComponent";
 import ProxyComponent from "./ProxyComponent";
 import MyCounterProvider from "./CounterContext";
 import CounterByContext from "./CounterContext/CounterByContext.tsx";
+import TodoList from "./TodoList";
 
 subscribe(counterState, () => {
     console.log('value change', counterState.value);
@@ -58,7 +59,6 @@ const App = () => {
                 </h1>
                 <hr/>
                 <Counter/>
-
                 {/*    派生  , 计算属性 , computed */}
                 <hr/>
                 <DerivedComponent desc={'计算属性'}/>
@@ -68,6 +68,7 @@ const App = () => {
                 <ResetComponent desc={'如何重置状态'}/>
                 <ProxyComponent desc={'useProxy 的使用'}/>
                 <CounterByContext desc={"配合react context 使用"}/>
+                <TodoList />
             </MyCounterProvider>
         </React.Fragment>
     )
