@@ -1,85 +1,79 @@
 import React from "react"
-import {proxy, ref} from "valtio";
+import {proxy, useSnapshot} from "valtio";
 import {derive, useProxy} from "valtio/utils";
-import { map } from "lodash-es";
-
-type Todo = {
-    id: number,
+type Todo  = {
+    id : number|string,
     text: string,
-    done: boolean,
+    done : boolean
 }
 const todoState = proxy({
-    list: [] as Todo[],
-    inputRef : ref({
-        current : {} as null | HTMLInputElement
-    }),
+    list : [] as Array<Todo>,
+    val: '',
 })
-const todoDerive = derive({
-   undoLength : (get)=>get(todoState.list).filter(t=>!t.done).length
+const undo = derive({
+    l : (get)=>get(todoState.list).filter(e=>!e.done).length
 })
-const TodoList = () => {
+const TodoList = ()=>{
     const todoConsumer = useProxy(todoState);
-    const handleAdd = ()=>{
-        const v = todoConsumer.inputRef.current?.value;
-        console.log(v);
-        if(v){
-            todoConsumer.list.push({
-                id : +(Math.random()*1e8).toFixed(0),
-                text : v,
-                done : false,
-            })
-        }
+    const len = useSnapshot(undo).l
+    const handleAdd = () => {
+      const ele = {
+          id  : Date.now(), // Math.random() * 1e9
+          text : todoConsumer.val ,
+          done : false
+      }
+      todoConsumer.list.push(ele);
+      todoConsumer.val = ''
+      // react useState => setState([...todoConsumer.list , ele])
+        // 如何获取text
+        // 1. todoState. val
     }
-    const doneIt = (id:number)=>{
-        const item = todoConsumer.list.find(e=>e.id === id);
-        console.log(item);
-        if(item) {
-            item.done = !item.done
+    const handleDone = (id:string|number) => {
+        const ele = todoConsumer.list.find(e=>e.id === id)
+        if(ele) {
+            ele.done = !ele.done
         }
     }
     return (
         <React.Fragment>
-            <h1>this is todoList demo</h1>
-            <h3>undoLength  : {todoDerive.undoLength}</h3>
+            <h1>
+                this is TodoList demo
+            </h1>
+            <h3>
+                undoLength : { len }
+            </h3>
             <section style={{
-                display: 'grid',
+                display:'grid',
                 gap : 16,
-                grid :'auto / 2fr 1fr',
-                marginBlock: '2rem'
+                grid: 'auto / 2fr 1fr'
             }}>
                 <input
-                    onKeyDown={e=>{
-                        if(e.key === 'Enter'){
-                            handleAdd();
-                        }
+                    value={todoConsumer.val}
+                    onChange={e=>{
+                        todoConsumer.val = e.target.value
                     }}
-                    type="text" ref={(r)=>{
-                    todoConsumer.inputRef.current = r;
-                }}/>
-                <button onClick={handleAdd}> append </button>
+                    type={'text'}/>
+                <button onClick={handleAdd}>append</button>
             </section>
-
-            <hr/>
             <ul>
-                {
-                    map(todoConsumer.list, (todo) => {
-                        return (
-                            <div key={todo.id} style={{
-                                display: 'grid',
-                                gap : 16,
-                                grid :'auto / 2fr 1fr',
-                                marginBlock: '2rem'
-                            }}>
-                                {
-                                    todo.done ? <del>{todo.text}</del> : <li>{todo.text}</li>
-                                }
-                                <button onClick={()=>doneIt(todo.id)}>{
-                                    !todo.done ?'do this!': 'undo this '
-                                }</button>
-                            </div>
-                        )
-                    })
-                }
+                {todoConsumer.list?.map(e=>{
+                    return (
+                        <div key={e.id} style={{
+                            display: 'grid',
+                            grid: 'auto / 300px 50px',
+                            marginBlock:'8px'
+                        }}>
+                            {
+                                //  如果已经完成, 添加中划线
+                                e.done ?  <del>{e.text}</del> : <li>{e.text}</li>
+                            }
+
+                            <button onClick={()=>handleDone(e.id)}>{
+                                e.done ? 'undo' :'done'
+                            }</button>
+                        </div>
+                    )
+                })}
             </ul>
         </React.Fragment>
     )
